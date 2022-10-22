@@ -5,6 +5,7 @@ import 'package:my_article/Constant.dart';
 import 'package:http_parser/http_parser.dart';
 
 import '../Models/ApiResponse/AllPostSuccess.dart';
+import '../Utils/SharedPreferenceHandler.dart';
 
 class PostController extends GetxController{
 
@@ -23,8 +24,10 @@ class PostController extends GetxController{
     String? mediaType
   })async{
 
+    String? token =  await SharedPreferenceHandler.getToken();
+
     Map<String , String > headers = {
-      "Authorization": "Bearer ${CONSTANTS.accessToken}",
+      "Authorization": "Bearer ${token!}",
       "Accept-Encoding":"gzip, deflate, br",
       "Accept":"*/*",
       "Content-Type":"multipart/form-data; boundary=<calculated when request is sent>"
@@ -55,12 +58,15 @@ class PostController extends GetxController{
 
   void getAllPost() async {
     http.Client client = http.Client();
+
+    String? token =  await SharedPreferenceHandler.getToken();
+
     http.Response response = await client.get(
         Uri.parse("${CONSTANTS.baseUrl}/api/post/"),
         headers:{
           'Content-type': 'application/json',
           'Accept': 'application/json',
-          "Authorization":"Bearer ${CONSTANTS.accessToken}"
+          "Authorization":"Bearer ${token}"
         }
     );
     var decodeResponse = jsonDecode(response.body);

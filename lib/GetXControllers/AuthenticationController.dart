@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:my_article/Constant.dart';
 import 'package:http_parser/http_parser.dart';
 
+import '../Models/UserModel.dart';
+
 class AuthenticationController extends GetxController{
 
   void signUp({
@@ -32,7 +34,7 @@ class AuthenticationController extends GetxController{
     
   }
 
-  void logIn({String? email ,  String? password})async{
+  Future<dynamic> logIn({String? email ,  String? password})async{
         http.Client client = http.Client();
         http.Response response = await client.post(Uri.parse("${CONSTANTS.baseUrl}/api/auth/login"),body:
          {
@@ -41,8 +43,13 @@ class AuthenticationController extends GetxController{
         });
         var decodeResult = jsonDecode(response.body);
        if(response.statusCode == 200){
+        UserNew userNew = userNewFromJson(response.body);
+         return userNew;
+         print("Successful 200 ${response.body}");
           //Save the user in the database
        }else{
+         return false;
+         print("Error Not 200 ${response.body}");
          //Error Occurred
        }
   }

@@ -35,6 +35,7 @@ dependencies:
   path_provider: ^2.0.0
   flutter_image_compress:
   path:
+  shared_preferences:
 
 
 
